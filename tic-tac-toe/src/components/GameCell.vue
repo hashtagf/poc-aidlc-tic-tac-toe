@@ -15,7 +15,7 @@
       class="mark" 
       :class="value.toLowerCase()"
     >
-      {{ value }}
+      {{ displayValue }}
     </span>
   </button>
 </template>
@@ -39,6 +39,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false
+  },
+  isChristmas: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -48,10 +52,22 @@ const positions = ['top-left', 'top-center', 'top-right',
                    'middle-left', 'center', 'middle-right',
                    'bottom-left', 'bottom-center', 'bottom-right']
 
+// Display Christmas symbols when theme is active
+const displayValue = computed(() => {
+  if (!props.value) return null
+  if (props.isChristmas) {
+    return props.value === 'X' ? '🎄' : '⭐'
+  }
+  return props.value
+})
+
 const cellLabel = computed(() => {
   const pos = positions[props.index]
   if (props.value) {
-    return `Cell ${pos}: ${props.value}`
+    const symbol = props.isChristmas 
+      ? (props.value === 'X' ? 'Christmas Tree' : 'Star')
+      : props.value
+    return `Cell ${pos}: ${symbol}`
   }
   return `Cell ${pos}: empty`
 })

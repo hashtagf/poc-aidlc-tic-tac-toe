@@ -1,5 +1,8 @@
 <template>
-  <div id="game-app">
+  <div id="game-app" :class="theme.themeClass.value">
+    <!-- Theme Toggle -->
+    <ThemeToggle :is-christmas="theme.isChristmas.value" @toggle="handleThemeToggle" />
+    
     <!-- Sound Toggle -->
     <SoundToggle :is-muted="sound.isMuted.value" @toggle="sound.toggleMute" />
     
@@ -41,6 +44,7 @@
         :board="game.board.value"
         :winning-cells="game.winningCells.value"
         :disabled="game.gameStatus.value !== 'playing' || isAITurn"
+        :is-christmas="theme.isChristmas.value"
         @cell-click="handleCellClick"
       />
       
@@ -78,12 +82,14 @@ import ScoreBoard from './components/ScoreBoard.vue'
 import GameHistory from './components/GameHistory.vue'
 import GameResult from './components/GameResult.vue'
 import SoundToggle from './components/SoundToggle.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
 
 import { useGameState } from './composables/useGameState'
 import { useAI } from './composables/useAI'
 import { useScore } from './composables/useScore'
 import { useHistory } from './composables/useHistory'
 import { useSound } from './composables/useSound'
+import { useTheme } from './composables/useTheme'
 
 // Initialize composables
 const game = useGameState()
@@ -91,6 +97,7 @@ const ai = useAI()
 const score = useScore()
 const history = useHistory()
 const sound = useSound()
+const theme = useTheme()
 
 // Screen navigation
 const currentScreen = ref('menu')
@@ -217,6 +224,12 @@ const goToMenu = () => {
   currentScreen.value = 'menu'
   game.resetGame()
   history.clearHistory()
+  sound.playClick()
+}
+
+// Toggle theme
+const handleThemeToggle = () => {
+  theme.toggleTheme()
   sound.playClick()
 }
 </script>

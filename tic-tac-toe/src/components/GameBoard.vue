@@ -7,6 +7,7 @@
       :index="index"
       :is-winning="winningCells.includes(index)"
       :disabled="disabled"
+      :is-christmas="isChristmas"
       @click="handleCellClick"
     />
   </div>
@@ -26,6 +27,10 @@ const props = defineProps({
     default: () => []
   },
   disabled: {
+    type: Boolean,
+    default: false
+  },
+  isChristmas: {
     type: Boolean,
     default: false
   }
